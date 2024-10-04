@@ -49,9 +49,10 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /* USER CODE BEGIN PV */
 uint8_t txData[] = {0x7E, 0x00, 0x14, 0x10, 0x52, 0x00, 0x13, 0xA2, 0x00, 0x42, 0x3F, 0x4D, 0x3D, 0xFF, 0xFE, 0x00, 0x00, 0x54, 0x78, 0x44, 0x61, 0x74, 0x61, 0x9A};
-uint8_t rxData[8];
-//uint8_t txData[] = "Hello, UART!";
-////uint8_t rxData[13];  // Buffer for incoming data
+uint8_t rxData[8];            // Buffer for received data
+uint8_t receivedByte;          // Single byte buffer for interrupt-driven receive
+int indx = 0;
+char msg[6];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -65,6 +66,26 @@ static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_USART1_UART_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
+
+/* Callback for when data is received */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
+    if (huart->Instance == USART2) {
+        // Store received byte in buffer for later use
+        rxData[indx++] = receivedByte; // Storing in rxData array (expand this as needed)
+
+        sprintf(msg, "0x%X ", rxData[indx]); // create msg string to echo to serial monitor
+
+        HAL_UART_Transmit(huart, (uint8_t*)msg, sizeof(msg), 1000);
+
+        if(indx > 7){
+        	indx = 0;
+        	HAL_UART_Transmit(huart, (uint8_t*)"\n", 1, 1000);
+        }
+
+        // Continue receiving the next byte using interrupt
+        HAL_UART_Receive_IT(&huart2, &receivedByte, 1);
+    }
+}
 
 /* USER CODE END PFP */
 
@@ -113,6 +134,8 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
+  HAL_UART_Receive_IT(&huart2, &receivedByte, 1);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -123,10 +146,7 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	HAL_UART_Transmit(&huart2, txData, sizeof(txData), HAL_MAX_DELAY);
-
-	HAL_UART_Receive(&huart2, rxData, sizeof(rxData), HAL_MAX_DELAY);
-	HAL_UART_Transmit(&huart1, rxData, sizeof(rxData), HAL_MAX_DELAY);
+	HAL_UART_Transmit(&huart2, txData, sizeof(txData), 1000);
 
 	HAL_Delay(1000);
 
