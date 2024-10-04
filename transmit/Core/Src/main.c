@@ -49,10 +49,9 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /* USER CODE BEGIN PV */
 uint8_t txData[] = {0x7E, 0x00, 0x14, 0x10, 0x52, 0x00, 0x13, 0xA2, 0x00, 0x42, 0x3F, 0x4D, 0x3D, 0xFF, 0xFE, 0x00, 0x00, 0x54, 0x78, 0x44, 0x61, 0x74, 0x61, 0x9A};
-uint8_t rxData[8];            // Buffer for received data
-uint8_t receivedByte;          // Single byte buffer for interrupt-driven receive
+uint8_t rxData[11];            // Buffer for received data
+uint8_t receivedByte[11];          // Single byte buffer for interrupt-driven receive
 int indx = 0;
-char msg[6];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -71,19 +70,27 @@ static void MX_USART2_UART_Init(void);
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     if (huart->Instance == USART2) {
         // Store received byte in buffer for later use
-        rxData[indx++] = receivedByte; // Storing in rxData array (expand this as needed)
-
-        sprintf(msg, "0x%X ", rxData[indx]); // create msg string to echo to serial monitor
-
-        HAL_UART_Transmit(huart, (uint8_t*)msg, sizeof(msg), 1000);
-
-        if(indx > 7){
-        	indx = 0;
-        	HAL_UART_Transmit(huart, (uint8_t*)"\n", 1, 1000);
+        for(int i = 0; i<sizeof(receivedByte); i++){
+        	rxData[i] = receivedByte[i];
         }
 
-        // Continue receiving the next byte using interrupt
-        HAL_UART_Receive_IT(&huart2, &receivedByte, 1);
+        const char *output = "Received Acknowledgment: ";
+        HAL_UART_Transmit(&huart1, (uint8_t*)output, strlen(output), 1000);
+
+        size_t msgLength = sizeof(rxData) / sizeof(rxData[0]);
+        char msg[msgLength * 2 + 1];
+
+        for(size_t i = 0; i<msgLength; i++){
+        	sprintf(msg + (i*2), "%02X", rxData[i]);
+        }
+        msg[msgLength*2] = '\0';
+
+        HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 1000);
+
+        output = "\r\n";
+        HAL_UART_Transmit(&huart1, (uint8_t*)output, strlen(output), 1000);
+
+        HAL_UART_Receive_IT(&huart2, receivedByte, 11);
     }
 }
 
@@ -134,7 +141,7 @@ int main(void)
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_UART_Receive_IT(&huart2, &receivedByte, 1);
+  HAL_UART_Receive_IT(&huart2, receivedByte, 11);
 
   /* USER CODE END 2 */
 
@@ -148,7 +155,7 @@ int main(void)
 
 	HAL_UART_Transmit(&huart2, txData, sizeof(txData), 1000);
 
-	HAL_Delay(1000);
+	HAL_Delay(3000);
 
   }
   /* USER CODE END 3 */

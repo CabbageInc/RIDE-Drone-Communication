@@ -34,34 +34,34 @@ $(wildcard ../makefile.init) \
 $(wildcard ../makefile.targets) \
 
 
-BUILD_ARTIFACT_NAME := USART_test
+BUILD_ARTIFACT_NAME := RIDE_Drone_Transmit
 BUILD_ARTIFACT_EXTENSION := elf
 BUILD_ARTIFACT_PREFIX :=
 BUILD_ARTIFACT := $(BUILD_ARTIFACT_PREFIX)$(BUILD_ARTIFACT_NAME)$(if $(BUILD_ARTIFACT_EXTENSION),.$(BUILD_ARTIFACT_EXTENSION),)
 
 # Add inputs and outputs from these tool invocations to the build variables 
 EXECUTABLES += \
-USART_test.elf \
+RIDE_Drone_Transmit.elf \
 
 MAP_FILES += \
-USART_test.map \
+RIDE_Drone_Transmit.map \
 
 SIZE_OUTPUT += \
 default.size.stdout \
 
 OBJDUMP_LIST += \
-USART_test.list \
+RIDE_Drone_Transmit.list \
 
 
 # All Target
 all: main-build
 
 # Main-build Target
-main-build: USART_test.elf secondary-outputs
+main-build: RIDE_Drone_Transmit.elf secondary-outputs
 
 # Tool invocations
-USART_test.elf USART_test.map: $(OBJS) $(USER_OBJS) C:\Users\memo4\Development\STM32CubeIDE\workspace_1.16.0\USART_test\STM32U575ZITXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-gcc -o "USART_test.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Users\memo4\Development\STM32CubeIDE\workspace_1.16.0\USART_test\STM32U575ZITXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="USART_test.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+RIDE_Drone_Transmit.elf RIDE_Drone_Transmit.map: $(OBJS) $(USER_OBJS) C:\Users\memo4\Development\STM32CubeIDE\workspace_1.16.0\RIDE-Drone-Communication\transmit\STM32U575ZITXQ_FLASH.ld makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-gcc -o "RIDE_Drone_Transmit.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m33 -T"C:\Users\memo4\Development\STM32CubeIDE\workspace_1.16.0\RIDE-Drone-Communication\transmit\STM32U575ZITXQ_FLASH.ld" --specs=nosys.specs -Wl,-Map="RIDE_Drone_Transmit.map" -Wl,--gc-sections -static --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
@@ -70,14 +70,14 @@ default.size.stdout: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
 	@echo 'Finished building: $@'
 	@echo ' '
 
-USART_test.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
-	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "USART_test.list"
+RIDE_Drone_Transmit.list: $(EXECUTABLES) makefile objects.list $(OPTIONAL_TOOL_DEPS)
+	arm-none-eabi-objdump -h -S $(EXECUTABLES) > "RIDE_Drone_Transmit.list"
 	@echo 'Finished building: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) USART_test.elf USART_test.list USART_test.map default.size.stdout
+	-$(RM) RIDE_Drone_Transmit.elf RIDE_Drone_Transmit.list RIDE_Drone_Transmit.map default.size.stdout
 	-@echo ' '
 
 secondary-outputs: $(SIZE_OUTPUT) $(OBJDUMP_LIST)
