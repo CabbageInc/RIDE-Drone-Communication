@@ -1,5 +1,5 @@
 /* USER CODE BEGIN Header */
-/* RIDE Drone Communication Project: Transmitter (on-board drone) Code
+/* RIDE Drone Communication Project: Receiver (ground station) Code */
 /**
   ******************************************************************************
   * @file           : main.c
@@ -50,8 +50,8 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /* USER CODE BEGIN PV */
 uint8_t txData[] = {0x7E, 0x00, 0x14, 0x10, 0x52, 0x00, 0x13, 0xA2, 0x00, 0x42, 0x3F, 0x4D, 0x3D, 0xFF, 0xFE, 0x00, 0x00, 0x54, 0x78, 0x44, 0x61, 0x74, 0x61, 0x9A};
-uint8_t rxData[11];            // Buffer for received data
-uint8_t newRxData[11];          // Single byte buffer for interrupt-driven receive
+uint8_t rxData[22];            // Buffer for received data
+uint8_t newRxData[22];          // Single byte buffer for interrupt-driven receive
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -61,14 +61,18 @@ static void MX_GPIO_Init(void);
 static void MX_ADC1_Init(void);
 static void MX_ICACHE_Init(void);
 static void MX_UCPD1_Init(void);
-static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_USART1_UART_Init(void);
+static void MX_USB_OTG_FS_PCD_Init(void);
 static void MX_USART2_UART_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* Callback for when data is received */
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
-    if (huart->Instance == USART2) {
+
+	// Expecting Receive Packet 0x90 of size 16 Bytes + size of data field in transmit packet
+	// Size of test packet is 16 + 6 = 22 bytes
+
+	if (huart->Instance == USART2) {
         // Store received byte in buffer for later use
         for(int i = 0; i<sizeof(newRxData); i++){
         	rxData[i] = newRxData[i];
@@ -90,7 +94,7 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
         output = "\r\n";
         HAL_UART_Transmit(&huart1, (uint8_t*)output, strlen(output), 1000);
 
-        HAL_UART_Receive_IT(&huart2, newRxData, 11);
+        HAL_UART_Receive_IT(&huart2, newRxData, 22);
     }
 }
 
@@ -136,12 +140,12 @@ int main(void)
   MX_ADC1_Init();
   MX_ICACHE_Init();
   MX_UCPD1_Init();
-  MX_USB_OTG_FS_PCD_Init();
   MX_USART1_UART_Init();
+  MX_USB_OTG_FS_PCD_Init();
   MX_USART2_UART_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_UART_Receive_IT(&huart2, newRxData, 11);
+  HAL_UART_Receive_IT(&huart2, newRxData, 22);
 
   /* USER CODE END 2 */
 
@@ -152,10 +156,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
-	HAL_UART_Transmit(&huart2, txData, sizeof(txData), 1000);
-
-	HAL_Delay(3000);
 
   }
   /* USER CODE END 3 */
