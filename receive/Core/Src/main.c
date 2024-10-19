@@ -52,7 +52,10 @@ PCD_HandleTypeDef hpcd_USB_OTG_FS;
 uint8_t txData[] = {0x7E, 0x00, 0x14, 0x10, 0x52, 0x00, 0x13, 0xA2, 0x00, 0x42, 0x3F, 0x4D, 0x3D, 0xFF, 0xFE, 0x00, 0x00, 0x54, 0x78, 0x44, 0x61, 0x74, 0x61, 0x9A};
 uint8_t rxData[24];            // main buffer for all received data
 // expecting 23 byte long packet during tests
-uint8_t newRxData[23];          // temporary buffer for incoming packets
+uint8_t newRxData[1];          // temporary buffer for incoming packets
+int w_idx = 0;
+bool packetIncoming = false;
+unsigned int dataSize = 0x0000;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -75,28 +78,50 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
 
 	if (huart->Instance == USART2) {
         // Store received byte in buffer for later use
-        for(int i = 0; i<sizeof(newRxData); i++){
+        /*for(int i = 0; i<sizeof(newRxData); i++){
         	rxData[i] = newRxData[i];
+        }*/
+
+		// check for 0x7E to mark the start of a packet
+		if(newRxData[0] == 0x7E) packetIncoming = true;
+
+		if(packetIncoming && &rxData[w_idx-3] >= rxData && rxData[w_idx-3] == 0x7E){
+			// if incoming packet type is "Receive"
+			if(newRxData[0] == 0x90){
+				dataSize = dataSize | (rxData[w_idx-2] << 8) | rxData[w_idx-1];
+				printf("packet size calculation complete");
+			}
+		}
+
+		rxData[w_idx] = newRxData[0];
+
+        // if just wrote to rxData index 22
+		if(w_idx >= 22){
+        	const char *output = "Received Data: ";
+        	HAL_UART_Transmit(&huart1, (uint8_t*)output, strlen(output), 1000);
+
+			size_t msgLength = sizeof(rxData) / sizeof(rxData[0]);
+			char msg[msgLength * 2 + 1];
+
+			for(size_t i = 0; i<msgLength; i++){
+				sprintf(msg + (i*2), "%02X", rxData[i]);
+			}
+			msg[msgLength*2] = '\0';
+
+			HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 1000);
+
+			output = "\r\n";
+			HAL_UART_Transmit(&huart1, (uint8_t*)output, strlen(output), 1000);
+
+			w_idx = 0;
+			packetIncoming = false;
+			dataSize = 0x0000;
+        }else{
+        	w_idx++;
         }
-
-        const char *output = "Received Data: ";
-        HAL_UART_Transmit(&huart1, (uint8_t*)output, strlen(output), 1000);
-
-        size_t msgLength = sizeof(rxData) / sizeof(rxData[0]);
-        char msg[msgLength * 2 + 1];
-
-        for(size_t i = 0; i<msgLength; i++){
-        	sprintf(msg + (i*2), "%02X", rxData[i]);
-        }
-        msg[msgLength*2] = '\0';
-
-        HAL_UART_Transmit(&huart1, (uint8_t*)msg, strlen(msg), 1000);
-
-        output = "\r\n";
-        HAL_UART_Transmit(&huart1, (uint8_t*)output, strlen(output), 1000);
 
         // expecting packet that is 23 bytes long during test
-        HAL_UART_Receive_IT(&huart2, newRxData, 23);
+        HAL_UART_Receive_IT(&huart2, newRxData, 1);
     }
 }
 
@@ -148,7 +173,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   // During test, expecting packet that is 23 bytes long
-  HAL_UART_Receive_IT(&huart2, newRxData, 23);
+  HAL_UART_Receive_IT(&huart2, newRxData, 1);
 
   /* USER CODE END 2 */
 
