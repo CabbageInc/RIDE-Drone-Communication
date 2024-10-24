@@ -23,6 +23,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+// test library
+#include "test.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -142,6 +144,10 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   HAL_UART_Receive_IT(&huart2, newRxData, 11);
+
+  // testing library functionality
+  int num = sumOfTwoNumbers(3, 4);
+  num++;
 
   /* USER CODE END 2 */
 
