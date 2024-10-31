@@ -1,6 +1,8 @@
-main: main.o TxPacket.o
-	gcc -o main main.o TxPacket.o
-main.o: main.c TxPacket.h
+main: main.o TxHandler.o RxHandler.o
+	gcc -o main main.o TxHandler.o RxHandler.o
+main.o: main.c TxHandler.h RxHandler.h
 	gcc -c -g main.c
-TxPacket.o: TxPacket.c TxPacket.h
-	gcc -c -g TxPacket.c
+TxHandler.o: TxHandler.c TxHandler.h
+	gcc -c -g TxHandler.c
+RxHandler.o: RxHandler.c RxHandler.h
+	gcc -c -g RxHandler.c
