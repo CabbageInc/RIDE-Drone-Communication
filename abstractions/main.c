@@ -3,14 +3,11 @@
 #include "RxHandler.h"
 
 int main(){
-    
-    int num = sumOfTwoNumbers(3, 5);
-    printf("this is the num: %d\n", num);
 
-    TXPacket packet;
-    packet.startDelimiter = 0x7E;
+    TXPacket packet = defaultTxPacket();
 
     printf("this is the start delimiter: %02X\n", packet.startDelimiter);
+    printf("this is the last byte of the payload data: %02X\n", packet.payloadData[199]);
 
     RXPacket packet2;
     packet2.startDelimiter = 0x7A;
