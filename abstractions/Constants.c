@@ -2,6 +2,7 @@
 
 const uint8_t START_DELIMITER = 0x7E; // universal start delimiter
 const uint16_t DEFAULT_TX_LENGTH = 219; // default length for TX Packet = 219 Bytes
+const size_t DEFAULT_TX_BUFFER_SIZE = 223;
 const uint8_t TX_FRAME = 0x10; // frame type for TX
 const uint8_t RX_FRAME = 0x90; // frame type for RX
 const uint8_t DEFAULT_FRAME_ID = 0x00; // default frame id = 0x00;

@@ -37,8 +37,10 @@ bool transmit(uint8_t data[], size_t size, DataType dataType, uint64_t destAddr)
 
         // create TX buffer
         uint8_t *txBuffer = packetToArray(&packet);
+        
+        // test output
         printf("TX Buffer: ");
-        for(size_t i=0; i<sizeof(txBuffer); i++){
+        for(size_t i=0; i<DEFAULT_TX_BUFFER_SIZE; i++){
             printf("%02X ", txBuffer[i]);
         }
         printf("\n");
@@ -118,9 +120,9 @@ uint8_t* packetToArray(TXPacket *packet){
     // start delimiter
     output[offset] = packet->startDelimiter;
     // length
-    shift = sizeof(packet->length) - 1;
+    shift = sizeof(packet->length);
     offset += 1;
-    for(size_t i=shift; i>-1; --i){output[shift-i+offset] = (packet->length >> i*8) & 0xFF;}
+    for(size_t i=shift; i>0; i--){output[shift-i+offset] = packet->length>>(i-1)*8 & 0xFF;}
     // frame type
     offset += 2;
     output[offset] = packet->frameType;
@@ -130,11 +132,11 @@ uint8_t* packetToArray(TXPacket *packet){
     // Destination address
     shift = sizeof(packet->destinationAddress);
     offset += 1;
-    for(size_t i=shift; i>-1; --i){output[shift-i+offset] = (packet->length >> i*8) & 0xFF;}
+    for(size_t i=shift; i>0; i--){output[shift-i+offset] = packet->destinationAddress>>(i-1)*8 & 0xFF;}
     // reserved
     shift = sizeof(packet->reserved);
     offset += 8;
-    for(size_t i=shift; i>-1; --i){output[shift-i+offset] = (packet->length >> i*8) & 0xFF;}
+    for(size_t i=shift; i>0; i--){output[shift-i+offset] = packet->reserved>>(i-1)*8 & 0xFF;}
     // broadcast radius
     offset += 2;
     output[offset] = packet->broadcastRadius;
@@ -144,7 +146,7 @@ uint8_t* packetToArray(TXPacket *packet){
     // fragment number
     shift = sizeof(packet->fragmentNumber);
     offset += 1;
-    for(size_t i=shift; i>-1; --i){output[shift-i+offset] = (packet->length >> i*8) & 0xFF;}
+    for(size_t i=shift; i>0; i--){output[shift-i+offset] = packet->length>>(i-1)*8 & 0xFF;}
     // data type
     offset += 4;
     output[offset] = packet->dataType;
@@ -156,4 +158,26 @@ uint8_t* packetToArray(TXPacket *packet){
     output[offset] = packet->checksum;
 
     return output;
+}
+
+void printPacket(TXPacket *packet){
+    printf("packet fields: \n");
+    printf("start delimiter: %02X\n", packet->startDelimiter);
+    printf("length: %04X\n", packet->length);
+    printf("frame type: %02X\n", packet->frameType);
+    printf("frame ID: %02X\n", packet->frameId);
+    printf("destination address: %llX\n", packet->destinationAddress);
+    printf("reserved: %04X\n", packet->reserved);
+    printf("broadcast radius: %02X\n", packet->broadcastRadius);
+    printf("transmit options: %02X\n", packet->transmitOptions);
+    printf("fragment number: %08X\n", packet->fragmentNumber);
+    printf("data type: %02X\n", packet->dataType);
+    // payload data
+    printf("payload data: ");
+    for(size_t i=0; i<MAX_DATA_SIZE; i++){
+        printf("%02X ", packet->payloadData[i]);
+    }
+    printf("\n");
+    // checksum
+    printf("checksum: %02X\n", packet->checksum);
 }

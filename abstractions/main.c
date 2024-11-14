@@ -5,6 +5,7 @@
 
 int main(){
 
+    /*
     TXPacket packet = defaultTxPacket();
 
     printf("this is the start delimiter: %02X\n", packet.startDelimiter);
@@ -21,8 +22,10 @@ int main(){
     printf("this is the default length of a packet: %04X\n", DEFAULT_TX_LENGTH);
 
     printf("this is the size of the unsigned long: %d\n", sizeof(unsigned long long));
+    */
 
     uint8_t data[] = "Hello World";
+
     size_t size = 11;
     transmit(data, size, TEXT, XBEE_GROUND_TEST_MAC_ADDR);
     

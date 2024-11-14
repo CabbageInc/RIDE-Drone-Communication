@@ -37,4 +37,7 @@ uint64_t sumAllBytesArray(uint8_t arr[], size_t byteCount);
 // convert packet to TX buffer array of uint8_t
 uint8_t* packetToArray(TXPacket *packet);
 
+// print packet to console
+void printPacket(TXPacket *packet);
+
 #endif // INC_TXHANDLER_H_
