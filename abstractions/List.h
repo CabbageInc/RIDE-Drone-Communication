@@ -4,6 +4,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+// !!!! Need to add List.h and List.c to makefile to allow these files to compile !!!! - 11/14/2024
+
 typedef struct Node {
     void* data;           // Generic pointer to hold any type of data
     struct Node* next;
