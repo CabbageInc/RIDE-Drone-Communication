@@ -1,8 +1,8 @@
 #include "Constants.h"
 
 const uint8_t START_DELIMITER = 0x7E; // universal start delimiter
-const uint16_t DEFAULT_TX_LENGTH = 219; // default length for TX Packet = 219 Bytes
-const size_t DEFAULT_TX_BUFFER_SIZE = 223;
+const uint16_t DEFAULT_TX_LENGTH = 220; // default length for TX Packet = 220 Bytes
+const size_t DEFAULT_TX_BUFFER_SIZE = 224; // default TX buffer size = 220 bytes + 4 bytes = 224 bytes
 const uint8_t TX_FRAME = 0x10; // frame type for TX
 const uint8_t RX_FRAME = 0x90; // frame type for RX
 const uint8_t DEFAULT_FRAME_ID = 0x00; // default frame id = 0x00;
@@ -14,4 +14,5 @@ const uint8_t BROADCAST_RADIUS = 0x00; // default broadcast radius for TX
 const uint8_t TRANSMIT_OPTIONS = 0x00; // default options for TX frames
 const uint32_t DEFAULT_FRAG_NUM = 0x00; // default fragment number = 0x00
 const uint8_t DEFAULT_DATA_TYPE = 0x00; // default TX data type = 0x00 (Text)
+const uint8_t DEFAULT_DATA_SIZE = 0x00; // defualt TX data size = 0x00
 const uint8_t DEFAULT_CHECKSUM = 0x00; // default checksum value = 0x00

@@ -2,8 +2,10 @@
 #define INC_CONSTANTS_H_
 
 #include <stdint.h>
+#include <stddef.h>
 
 #define MAX_DATA_SIZE 200 // max size for data field in TXPacket
+#define DEFAULT_RX_BUFFER_SIZE 222 // default size for RX Buffer = 222 bytes
 
 // fragment data types
 typedef enum {
@@ -13,19 +15,23 @@ typedef enum {
 } DataType;
 
 extern const uint8_t START_DELIMITER; // universal start delimiter
-extern const uint16_t DEFAULT_TX_LENGTH; // default TX packet length = 219 Bytes
-extern const size_t DEFAULT_TX_BUFFER_SIZE; // default TX buffer size = 219 bytes + 4 bytes = 223 bytes
+extern const uint16_t DEFAULT_TX_LENGTH; // default TX packet length = 220 Bytes
+extern const uint16_t DEFAULT_RX_LENGTH; // default RX packet length = 218 Bytes
+extern const size_t DEFAULT_TX_BUFFER_SIZE; // default TX buffer size = 220 bytes + 4 bytes = 224 bytes
 extern const uint8_t TX_FRAME; // frame type for TX
 extern const uint8_t RX_FRAME; // frame type for RX
 extern const uint8_t DEFAULT_FRAME_ID; // default frame id = 0x00;
 extern const uint64_t XBEE_DRONE_TEST_MAC_ADDR; // mac address for drone-side XBee
 extern const uint64_t XBEE_GROUND_TEST_MAC_ADDR; // mac address for ground-side XBee
 extern const uint64_t DEFAULT_DEST_ADDR; // default destination address = 0x000000000000FFFF (broadcast address)
+extern const uint64_t DEFAULT_SRC_ADDR; // default source address = 0x000000000000FFFF (broadcast address)
 extern const uint16_t RESERVED_FIELD; // universal bytes for populating reserved field in XBee api frame
 extern const uint8_t BROADCAST_RADIUS; // broadcast radius for TX
 extern const uint8_t TRANSMIT_OPTIONS; // default options for TX frames
+extern const uint8_t RECEIVE_OPTIONS; // default receive options for RX frames
 extern const uint32_t DEFAULT_FRAG_NUM; // default fragment number = 0x00
 extern const uint8_t DEFAULT_DATA_TYPE; // default TX data type = 0x00 (Text)
+extern const uint8_t DEFAULT_DATA_SIZE; // default TX data size = 0x00
 extern const uint8_t DEFAULT_CHECKSUM; // default checksum value = 0x00
 
 #endif // INC_CONSTANTS_H_

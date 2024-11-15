@@ -18,6 +18,7 @@ typedef struct {
     uint8_t transmitOptions; // 1 Byte or 8 bits
     uint32_t fragmentNumber; // 4 Bytes or 32 bits
     uint8_t dataType; // 1 Byte or 8 bits
+    uint8_t dataSize; // 1 Byte or 8 bits
     uint8_t payloadData[MAX_DATA_SIZE]; // variable Bytes, max = 200 Bytes
     uint8_t checksum; // 1 Byte or 8 Bits
 } TXPacket;

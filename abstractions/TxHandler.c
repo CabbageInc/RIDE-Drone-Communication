@@ -5,14 +5,15 @@
 
 bool transmit(uint8_t data[], size_t size, DataType dataType, uint64_t destAddr){
     // prepare for rand num generation
-    srand(time(NULL));
+    //srand(time(NULL));
     
     // local variables
     uint32_t fragmentNumber = 0;
-    uint8_t messageId = 0x00; //rand() % 256;
+    uint8_t messageId = 0x01; //rand() % 256;
 
     if(size > 200){
         // framgent the data array
+        // fragment numbers starting at 0x01 (rather than default 0x00) mean that data has been fragmented
     }else{
         // transmit the data array in its entirety
         TXPacket packet = defaultTxPacket();
@@ -28,6 +29,8 @@ bool transmit(uint8_t data[], size_t size, DataType dataType, uint64_t destAddr)
         packet.fragmentNumber = fragmentNumber;
         // data type
         packet.dataType = dataType;
+        // data size
+        packet.dataSize = size;
         // payload data
         for(size_t i = 0; i<size; i++){
             packet.payloadData[i] = data[i];
@@ -39,13 +42,14 @@ bool transmit(uint8_t data[], size_t size, DataType dataType, uint64_t destAddr)
         uint8_t *txBuffer = packetToArray(&packet);
         
         // test output
-        printf("TX Buffer: ");
+        /*printf("TX Buffer: ");
         for(size_t i=0; i<DEFAULT_TX_BUFFER_SIZE; i++){
             printf("%02X ", txBuffer[i]);
         }
-        printf("\n");
+        printf("\n");*/
 
         // HAL_Transmit...
+        //HAL_UART_Transmit_IT(huart, txBuffer, DEFAULT_TX_BUFFER_SIZE);
 
         // clean up dynamic memory for TX Buffer
         free(txBuffer);
@@ -69,6 +73,7 @@ TXPacket defaultTxPacket(){
         .transmitOptions = TRANSMIT_OPTIONS,
         .fragmentNumber = DEFAULT_FRAG_NUM,
         .dataType = DEFAULT_DATA_TYPE,
+		.dataSize = DEFAULT_DATA_SIZE,
         .payloadData = {0x00},
         .checksum = DEFAULT_CHECKSUM
     };
@@ -85,6 +90,7 @@ uint8_t calcChecksum(TXPacket *packet){
     sum += packet->transmitOptions;
     sum += sumAllBytes(packet->fragmentNumber, sizeof(packet->fragmentNumber));
     sum += packet->dataType;
+    sum += packet->dataSize;
     sum += sumAllBytesArray(packet->payloadData, MAX_DATA_SIZE);
 
     // return the last 8 bits (1 byte) subtracted from 0xFF
@@ -150,6 +156,9 @@ uint8_t* packetToArray(TXPacket *packet){
     // data type
     offset += 4;
     output[offset] = packet->dataType;
+    // payload data size
+    offset += 1;
+    output[offset] = packet->dataSize;
     // payload data
     offset += 1;
     for(size_t i=0; i<MAX_DATA_SIZE; i++){output[i+offset] = packet->payloadData[i];}
@@ -172,6 +181,7 @@ void printPacket(TXPacket *packet){
     printf("transmit options: %02X\n", packet->transmitOptions);
     printf("fragment number: %08X\n", packet->fragmentNumber);
     printf("data type: %02X\n", packet->dataType);
+    printf("data size: %02X\n", packet->dataSize);
     // payload data
     printf("payload data: ");
     for(size_t i=0; i<MAX_DATA_SIZE; i++){

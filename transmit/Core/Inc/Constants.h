@@ -14,8 +14,8 @@ typedef enum {
 } DataType;
 
 extern const uint8_t START_DELIMITER; // universal start delimiter
-extern const uint16_t DEFAULT_TX_LENGTH; // default TX packet length = 219 Bytes
-extern const size_t DEFAULT_TX_BUFFER_SIZE; // default TX buffer size = 219 bytes + 4 bytes = 223 bytes
+extern const uint16_t DEFAULT_TX_LENGTH; // default TX packet length = 220 Bytes
+extern const size_t DEFAULT_TX_BUFFER_SIZE; // default TX buffer size = 220 bytes + 4 bytes = 224 bytes
 extern const uint8_t TX_FRAME; // frame type for TX
 extern const uint8_t RX_FRAME; // frame type for RX
 extern const uint8_t DEFAULT_FRAME_ID; // default frame id = 0x00;
@@ -27,6 +27,7 @@ extern const uint8_t BROADCAST_RADIUS; // broadcast radius for TX
 extern const uint8_t TRANSMIT_OPTIONS; // default options for TX frames
 extern const uint32_t DEFAULT_FRAG_NUM; // default fragment number = 0x00
 extern const uint8_t DEFAULT_DATA_TYPE; // default TX data type = 0x00 (Text)
+extern const uint8_t DEFAULT_DATA_SIZE; // default TX data size = 0x00
 extern const uint8_t DEFAULT_CHECKSUM; // default checksum value = 0x00
 
 #endif // INC_CONSTANTS_H_

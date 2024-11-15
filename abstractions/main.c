@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "TxHandler.h"
 #include "RxHandler.h"
 #include "Constants.h"
@@ -26,7 +27,7 @@ int main(){
 
     uint8_t data[] = "Hello World";
 
-    size_t size = 11;
+    size_t size = strlen(data);
     transmit(data, size, TEXT, XBEE_GROUND_TEST_MAC_ADDR);
     
     return 0;
