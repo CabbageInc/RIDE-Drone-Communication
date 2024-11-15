@@ -23,8 +23,6 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-// test library
-#include "test.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -51,9 +49,13 @@ UART_HandleTypeDef huart2;
 PCD_HandleTypeDef hpcd_USB_OTG_FS;
 
 /* USER CODE BEGIN PV */
-uint8_t txData[] = {0x7E, 0x00, 0x15, 0x10, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x42, 0x3F, 0x4D, 0x3D, 0xFF, 0xFE, 0x00, 0x00, 0x54, 0x65, 0x73, 0x74, 0x31, 0x32, 0x33, 0xFB};
+uint8_t txData[] = {0x7E, 0x00, 0x19, 0x10, 0x01, 0x00, 0x13, 0xA2, 0x00, 0x42, 0x3F, 0x4D, 0x3D, 0xFF, 0xFE, 0x00, 0x00, 0x48, 0x65, 0x6C, 0x6C, 0x6F, 0x20, 0x57, 0x6F, 0x72, 0x6C, 0x64, 0x15};
 uint8_t rxData[11];            // Buffer for received data
 uint8_t newRxData[11];          // Single byte buffer for interrupt-driven receive
+bool transmitFinished = true;
+
+uint8_t data[] = "Hello World";
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -96,6 +98,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     }
 }
 
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart){
+	if(huart->Instance == USART1){
+		transmitFinished = true;
+	}
+	if(huart->Instance == USART2){
+		transmitFinished = true;
+	}
+}
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -149,6 +159,8 @@ int main(void)
   int num = sumOfTwoNumbers(3, 4);
   num++;
 
+  size_t size = strlen(data);
+
   /* USER CODE END 2 */
 
   /* Infinite loop */
@@ -159,9 +171,14 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	HAL_UART_Transmit(&huart2, txData, sizeof(txData), 1000);
 
-	HAL_Delay(3000);
+	if(transmitFinished && huart2.gState == HAL_UART_STATE_READY){
+		//HAL_UART_Transmit_IT(&huart2, txData, sizeof(txData));
+		transmit(&huart2, data, size, TEXT, XBEE_GROUND_TEST_MAC_ADDR);
+		transmitFinished = false;
+	}
+
+	HAL_Delay(100);
 
   }
   /* USER CODE END 3 */

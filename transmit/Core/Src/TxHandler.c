@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include "TxHandler.h"
 
-bool transmit(uint8_t data[], size_t size, DataType dataType, uint64_t destAddr){
+bool transmit(UART_HandleTypeDef *huart, uint8_t data[], size_t size, DataType dataType, uint64_t destAddr){
     // prepare for rand num generation
-    srand(time(NULL));
+    //srand(time(NULL));
     
     // local variables
     uint32_t fragmentNumber = 0;
@@ -39,13 +39,14 @@ bool transmit(uint8_t data[], size_t size, DataType dataType, uint64_t destAddr)
         uint8_t *txBuffer = packetToArray(&packet);
         
         // test output
-        printf("TX Buffer: ");
+        /*printf("TX Buffer: ");
         for(size_t i=0; i<DEFAULT_TX_BUFFER_SIZE; i++){
             printf("%02X ", txBuffer[i]);
         }
-        printf("\n");
+        printf("\n");*/
 
         // HAL_Transmit...
+        HAL_UART_Transmit_IT(huart, txBuffer, DEFAULT_TX_BUFFER_SIZE);
 
         // clean up dynamic memory for TX Buffer
         free(txBuffer);

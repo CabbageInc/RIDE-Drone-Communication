@@ -1,5 +1,6 @@
-Core/Src/stm32u5xx_hal_msp.o: ../Core/Src/stm32u5xx_hal_msp.c \
- ../Core/Inc/main.h ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal.h \
+Core/Src/TxHandler.o: ../Core/Src/TxHandler.c ../Core/Inc/TxHandler.h \
+ ../Core/Inc/Constants.h \
+ ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal.h \
  ../Core/Inc/stm32u5xx_hal_conf.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rcc.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_def.h \
@@ -31,19 +32,9 @@ Core/Src/stm32u5xx_hal_msp.o: ../Core/Src/stm32u5xx_hal_msp.c \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_pcd.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_usb.h \
  ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_pcd_ex.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_ucpd.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_bus.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_cortex.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_rcc.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_system.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_utils.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_pwr.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_gpio.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_dma.h \
- ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_exti.h \
- ../Core/Inc/test.h ../Core/Inc/Constants.h ../Core/Inc/TxHandler.h
-../Core/Inc/main.h:
+ ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h
+../Core/Inc/TxHandler.h:
+../Core/Inc/Constants.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal.h:
 ../Core/Inc/stm32u5xx_hal_conf.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_rcc.h:
@@ -77,16 +68,3 @@ Core/Src/stm32u5xx_hal_msp.o: ../Core/Src/stm32u5xx_hal_msp.c \
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_usb.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_pcd_ex.h:
 ../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_hal_exti.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_ucpd.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_bus.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_cortex.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_rcc.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_system.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_utils.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_pwr.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_gpio.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_dma.h:
-../Drivers/STM32U5xx_HAL_Driver/Inc/stm32u5xx_ll_exti.h:
-../Core/Inc/test.h:
-../Core/Inc/Constants.h:
-../Core/Inc/TxHandler.h:

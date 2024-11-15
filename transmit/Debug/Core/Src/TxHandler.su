@@ -1,0 +1,7 @@
+../Core/Src/TxHandler.c:6:6:transmit	272	static
+../Core/Src/TxHandler.c:61:10:defaultTxPacket	296	static
+../Core/Src/TxHandler.c:78:9:calcChecksum	152	static
+../Core/Src/TxHandler.c:95:10:sumAllBytes	64	static
+../Core/Src/TxHandler.c:103:10:sumAllBytesArray	48	static
+../Core/Src/TxHandler.c:111:10:packetToArray	64	static
+../Core/Src/TxHandler.c:164:6:printPacket	24	static
